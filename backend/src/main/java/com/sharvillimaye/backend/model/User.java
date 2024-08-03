@@ -11,46 +11,47 @@ import java.util.Set;
 @Setter
 public class User implements UserDetails {
 
-    private Integer userId;
+    private long id;
     private String username;
+    private String email;
+    private String phoneNumber;
     private String password;
     private Set<Role> authorities;
+    private boolean enabled;
+    private VerificationToken verificationToken;
 
     public User() {
         super();
-        authorities = new HashSet<>();
+        this.authorities = new HashSet<>();
+        this.enabled = false;
     }
 
-    public User(Integer userId, String username, String password, Set<Role> authorities) {
+    public User(String username, String password, Set<Role> authorities) {
         super();
-        this.userId = userId;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
+        this.enabled = false;
     }
 
-    /* If you want account locking capabilities create variables and ways to set them for the methods below */
     @Override
     public boolean isAccountNonExpired() {
-        // TODO Auto-generated method stub
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        // TODO Auto-generated method stub
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        // TODO Auto-generated method stub
         return true;
     }
 
     @Override
     public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return true;
+        return enabled;
     }
+
 }

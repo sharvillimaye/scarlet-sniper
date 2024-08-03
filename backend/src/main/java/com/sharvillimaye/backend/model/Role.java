@@ -8,24 +8,11 @@ import org.springframework.security.core.GrantedAuthority;
 @Setter
 public class Role implements GrantedAuthority {
 
-    private Integer roleId;
+    private long id;
     private String authority;
 
-    public Role() {
-        super();
-    }
-
-    public Role (Integer roleId, String authority) {
-        this.roleId = roleId;
+    public Role(String authority) {
         this.authority = authority;
     }
 
-    public Role(String authority){
-        this.authority = authority;
-    }
-
-    @Override
-    public String getAuthority() {
-        return this.authority;
-    }
 }
