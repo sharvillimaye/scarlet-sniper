@@ -13,7 +13,7 @@ import java.time.Instant;
 import java.util.stream.Collectors;
 
 @Service
-public class TokenService {
+public class JwtService {
 
     @Autowired
     private JwtEncoder jwtEncoder;

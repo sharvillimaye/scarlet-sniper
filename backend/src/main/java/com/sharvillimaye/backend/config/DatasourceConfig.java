@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 @Configuration
 public class DatasourceConfig {
-
     @Bean
     @Primary
     @ConfigurationProperties("spring.datasource.hikari")

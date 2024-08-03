@@ -26,13 +26,12 @@ public class BackendApplication {
 			if(roleDAO.findByAuthority("ADMIN").isPresent()) {
 				return;
 			}
-
-			Role adminRole = roleDAO.save(new Role("ADMIN"));
+			Role adminRole = new Role("ADMIN");
+			roleDAO.save(adminRole);
 			roleDAO.save(new Role("USER"));
 			Set<Role> roles = new HashSet<>();
 			roles.add(adminRole);
-			User admin = new User(1, "admin", passwordEncode.encode("password"), roles);
-
+			User admin = new User("admin", passwordEncode.encode("password"), roles);
 			userDAO.save(admin);
 		};
 	}

@@ -34,14 +34,16 @@ public class AuthenticationService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private TokenService tokenService;
+    private JwtService jwtService;
 
     public User registerUser(String username, String password) {
         String encodedPassword = passwordEncoder.encode(password);
         Role userRole = roleDAO.findByAuthority("USER").get();
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);
-        return userDAO.save(new User(0, username, encodedPassword, authorities));
+        User user = new User(username, encodedPassword, authorities);
+        userDAO.save(user);
+        return user;
     }
 
     public LoginResponseDTO loginUser(String username, String password) {
@@ -49,7 +51,7 @@ public class AuthenticationService {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
-            String token = tokenService.generateJwt(authentication);
+            String token = jwtService.generateJwt(authentication);
             return new LoginResponseDTO(userDAO.findByUsername(username).get(), token);
         } catch (AuthenticationException e) {
             return new LoginResponseDTO(null, "");

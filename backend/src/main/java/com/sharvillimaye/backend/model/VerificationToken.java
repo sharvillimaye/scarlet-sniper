@@ -9,11 +9,20 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class VerificationToken {
-
     private long id;
     private String token;
     private VerificationMethod verificationMethod;
     private LocalDateTime verificationCodeExpiresAt;
     private boolean used;
 
+    public VerificationToken() {
+        this.used = false;
+    }
+
+    public VerificationToken(String token, VerificationMethod verificationMethod, LocalDateTime verificationCodeExpiresAt) {
+        this.token = token;
+        this.verificationMethod = verificationMethod;
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+        this.used = false;
+    }
 }

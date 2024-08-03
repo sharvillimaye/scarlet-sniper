@@ -7,12 +7,12 @@ import org.springframework.security.core.GrantedAuthority;
 @Getter
 @Setter
 public class Role implements GrantedAuthority {
-
     private long id;
     private String authority;
+
+    public Role() {}
 
     public Role(String authority) {
         this.authority = authority;
     }
-
 }

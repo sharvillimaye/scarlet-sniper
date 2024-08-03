@@ -10,7 +10,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class User implements UserDetails {
-
     private long id;
     private String username;
     private String email;
@@ -21,13 +20,11 @@ public class User implements UserDetails {
     private VerificationToken verificationToken;
 
     public User() {
-        super();
         this.authorities = new HashSet<>();
         this.enabled = false;
     }
 
     public User(String username, String password, Set<Role> authorities) {
-        super();
         this.username = username;
         this.password = password;
         this.authorities = authorities;
@@ -53,5 +50,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
-
 }

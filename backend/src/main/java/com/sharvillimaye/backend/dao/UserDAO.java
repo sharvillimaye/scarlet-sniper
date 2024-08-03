@@ -6,10 +6,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserDAO {
-    User findById(Integer id);
-    List<User> findAll();
-    User save(User user);
-    User update(User user);
-    User deleteById(int id);
+    Optional<User> findById(long id);
     Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
+    Optional<User> findByPhoneNumber(String phoneNumber);
+    Optional<User> findByEmailOrPhoneNumber(String email, String phoneNumber);
+    Optional<User> findByVerificationCode(String verificationCode);
+    List<User> findAll();
+    int save(User user);
+    int update(User user);
+    Optional<User> delete(long id);
 }

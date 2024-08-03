@@ -8,6 +8,8 @@ spring:
             driver-class-name: com.mysql.cj.jdbc.Driver
     application:
         name: backend
+    config:
+        import: optional:file:.env[.properties]
 server:
     error:
       include-binding-errors: always
