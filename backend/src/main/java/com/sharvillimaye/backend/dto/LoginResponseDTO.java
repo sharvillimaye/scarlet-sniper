@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginResponseDTO {
-
     private User user;
     private String jwt;
 

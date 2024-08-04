@@ -29,7 +29,7 @@ public class JwtService {
                 .collect(Collectors.joining(" "));
 
         Instant now = Instant.now();
-        Instant expiresAt = now.plus(6, ChronoUnit.MONTHS);
+        Instant expiresAt = now.plus(3600000, ChronoUnit.SECONDS);
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")

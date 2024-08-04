@@ -20,7 +20,6 @@ import java.util.Set;
 @Service
 @Transactional
 public class AuthenticationService {
-
     @Autowired
     private UserDAO userDAO;
 

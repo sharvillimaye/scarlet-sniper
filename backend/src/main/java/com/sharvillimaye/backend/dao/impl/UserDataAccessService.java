@@ -2,6 +2,7 @@ package com.sharvillimaye.backend.dao.impl;
 
 import com.sharvillimaye.backend.dao.RoleDAO;
 import com.sharvillimaye.backend.dao.UserDAO;
+import com.sharvillimaye.backend.model.Role;
 import com.sharvillimaye.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,6 +12,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -46,8 +48,30 @@ public class UserDataAccessService implements UserDAO {
 
     @Override
     public Optional<User> findByUsername(String username) {
-        var sql = "SELECT * FROM users WHERE username = ?";
-        return jdbcTemplate.query(sql, userRowMapper, username).stream().findFirst();
+//        var sql = "SELECT * FROM users WHERE username = ?";
+//        Optional<User> user = jdbcTemplate.query(sql, userRowMapper, username).stream().findFirst();
+//        var sql2 = "SELECT * FROM user_role WHERE user_id = ?";
+//        jdbcTemplate.query(sql2, ,user.get().getId());
+//
+//
+//        return jdbcTemplate.query(sql, userRowMapper, username).stream().findFirst();
+        String sql = "SELECT * FROM users WHERE username = ?";
+        Optional<User> userOpt = jdbcTemplate.query(sql, userRowMapper, username).stream().findFirst();
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            String sql2 = """
+            SELECT r.authority 
+            FROM roles r
+            INNER JOIN user_role ur ON ur.role_id = r.role_id
+            WHERE ur.user_id = ?
+        """;
+            List<Role> authorities = jdbcTemplate.query(sql2, (rs, rowNum) ->
+                    new Role(rs.getString("authority")), user.getId()
+            );
+            user.setAuthorities(new HashSet<>(authorities));
+            return Optional.of(user);
+        }
+        return Optional.empty();
     }
 
     @Override
