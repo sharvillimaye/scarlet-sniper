@@ -1,12 +1,18 @@
 package com.sharvillimaye.backend.dao.impl;
 
+import com.sharvillimaye.backend.dao.RoleDAO;
 import com.sharvillimaye.backend.dao.UserDAO;
 import com.sharvillimaye.backend.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -17,6 +23,9 @@ public class UserDataAccessService implements UserDAO {
     public UserDataAccessService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
+    @Autowired
+    private RoleDAO roleDAO;
 
     private final RowMapper<User> userRowMapper = (rs, rowNum) -> {
         User user = new User();
@@ -71,15 +80,29 @@ public class UserDataAccessService implements UserDAO {
     }
 
     @Override
-    public int save(User user) {
-        var sql = "INSERT INTO users(username, password, email, phone_number) VALUES (?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getEmail(), user.getPhoneNumber());
+    public void save(User user) {
+        var sql = "INSERT INTO users(username, password, email, phone_number, enabled) VALUES (?, ?, ?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getPhoneNumber());
+            ps.setBoolean(5, user.isEnabled());
+            return ps;
+        }, keyHolder);
+        long userId = Objects.requireNonNull(keyHolder.getKey()).longValue();
+        var sql2 = "INSERT INTO user_role(user_id, role_id) VALUES (?, ?)";
+        for (var authority : user.getAuthorities()) {
+            jdbcTemplate.update(sql2, userId, roleDAO.findByAuthority(authority.getAuthority()).get().getId());
+        }
     }
 
     @Override
-    public int update(User user) {
+    public void update(User user) {
         var sql = "UPDATE users SET username = ?, password = ?, email = ?, phone_number = ? WHERE user_id = ?";
-        return jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getEmail(), user.getPhoneNumber(), user.getId());
+        jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getEmail(), user.getPhoneNumber(), user.getId());
     }
 
     @Override

@@ -44,15 +44,15 @@ public class RoleDataAccessService implements RoleDAO {
     }
 
     @Override
-    public int save(Role role) {
+    public void save(Role role) {
         var sql = "INSERT INTO roles (role_id, authority) VALUES (?, ?)";
-        return jdbcTemplate.update(sql, role.getId(), role.getAuthority());
+        jdbcTemplate.update(sql, role.getId(), role.getAuthority());
     }
 
     @Override
-    public int update(Role role) {
+    public void update(Role role) {
         var sql = "UPDATE roles SET authority = ? WHERE role_id = ?";
-        return jdbcTemplate.update(sql, role.getAuthority(), role.getId());
+        jdbcTemplate.update(sql, role.getAuthority(), role.getId());
     }
 
     @Override

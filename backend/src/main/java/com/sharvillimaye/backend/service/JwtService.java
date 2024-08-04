@@ -1,6 +1,7 @@
 package com.sharvillimaye.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -10,11 +11,12 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
-
     @Autowired
     private JwtEncoder jwtEncoder;
 
@@ -26,9 +28,13 @@ public class JwtService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
 
+        Instant now = Instant.now();
+        Instant expiresAt = now.plus(6, ChronoUnit.MONTHS);
+
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
-                .issuedAt(Instant.now())
+                .issuedAt(now)
+                .expiresAt(expiresAt)
                 .subject(authentication.getName())
                 .claim("roles", scope)
                 .build();

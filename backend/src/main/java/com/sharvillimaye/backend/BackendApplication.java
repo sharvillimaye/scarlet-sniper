@@ -32,6 +32,7 @@ public class BackendApplication {
 			Set<Role> roles = new HashSet<>();
 			roles.add(adminRole);
 			User admin = new User("admin", passwordEncode.encode("password"), roles);
+			admin.setEnabled(true);
 			userDAO.save(admin);
 		};
 	}

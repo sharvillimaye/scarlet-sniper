@@ -9,7 +9,7 @@ public interface RoleDAO {
     Optional<Role> findById(long id);
     Optional<Role> findByAuthority(String authority);
     List<Role> findAll();
-    int save(Role role);
-    int update(Role role);
+    void save(Role role);
+    void update(Role role);
     Optional<Role> delete(long id);
 }

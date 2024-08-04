@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements UserDetailsService {
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 

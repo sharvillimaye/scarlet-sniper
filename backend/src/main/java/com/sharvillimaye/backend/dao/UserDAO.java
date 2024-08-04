@@ -13,7 +13,7 @@ public interface UserDAO {
     Optional<User> findByEmailOrPhoneNumber(String email, String phoneNumber);
     Optional<User> findByVerificationCode(String verificationCode);
     List<User> findAll();
-    int save(User user);
-    int update(User user);
+    void save(User user);
+    void update(User user);
     Optional<User> delete(long id);
 }
